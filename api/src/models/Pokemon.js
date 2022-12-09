@@ -4,9 +4,40 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define('pokemon', {
+    id: {
+      type: DataTypes.STRING(4), // Formato 'C001'
+      primaryKey: true,
+      allowNull: false,
+      validate: {
+        is: {
+          args: /^C[0-9]{3}$/g,
+          msg: 'El formato del id debe ser del estilo "C001"'
+        }
+      }
+    },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
+    hp: {
+      type: DataTypes.INTEGER
+    },
+    attack: {
+      type: DataTypes.INTEGER
+    },
+    defense: {
+      type: DataTypes.INTEGER
+    },
+    speed: {
+      type: DataTypes.INTEGER
+    },
+    height: {
+      type: DataTypes.INTEGER
+    },
+    weight: {
+      type: DataTypes.INTEGER
+    }
+  }, {
+    timestamps: false
   });
 };
