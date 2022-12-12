@@ -5,13 +5,13 @@ module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define('pokemon', {
     id: {
-      type: DataTypes.STRING(4), // Formato 'C001'
+      type: DataTypes.STRING(4), // Formato 'C123'
       primaryKey: true,
       allowNull: false,
       validate: {
         is: {
-          args: /^C[0-9]{3}$/g,
-          msg: 'El formato del id debe ser del estilo "C001"'
+          args: /^C[1-9][0-9]*$/g,
+          msg: 'El formato del id debe ser del estilo "C1", "C12", "C123", etc.'
         }
       }
     },
@@ -36,6 +36,9 @@ module.exports = (sequelize) => {
     },
     weight: {
       type: DataTypes.INTEGER
+    },
+    image: {
+      type: DataTypes.STRING
     }
   }, {
     timestamps: false
