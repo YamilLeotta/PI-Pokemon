@@ -11,13 +11,21 @@ module.exports = (sequelize) => {
       validate: {
         is: {
           args: /^C[1-9][0-9]*$/g,
-          msg: 'El formato del id debe ser del estilo "C1", "C12", "C123", etc.'
+          msg: 'Format should be "C1", "C12", "C123", (etc.) styled'
         }
       }
     },
     name: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.STRING(15),
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        isAlpha: true,
+        isLowercase: true
+      },
+      set(value) {
+        this.setDataValue('name', value.toLowerCase());
+      }
     },
     hp: {
       type: DataTypes.INTEGER
@@ -38,7 +46,10 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER
     },
     image: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      validate: {
+        isUrl: true
+      },
     }
   }, {
     timestamps: false

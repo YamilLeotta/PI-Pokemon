@@ -10,7 +10,16 @@ module.exports = (sequelize) => {
       autoIncrement: true
     },
     name: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING(10),
+      unique: true,
+      validate: {
+        notEmpty: true,
+        isAlpha: true,
+        isLowercase: true
+      },
+      set(value) {
+        this.setDataValue('name', value.toLowerCase());
+      }
     }
   }, {
       timestamps: false
