@@ -67,8 +67,8 @@ async function getDetail(param, cachedPokemons){
 
     if (!finded){
         console.log(`Busco Pokemon ${param} en Api!`);
-        finded = (await (axios.get(`https://pokeapi.co/api/v2/pokemon/${param}`))).data;
-        finded = clean([finded]);
+        finded = (await (axios.get(`https://pokeapi.co/api/v2/pokemon/${param}`)))?.data;
+        finded = finded && clean([finded]);
     }
 
     return finded;

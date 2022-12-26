@@ -1,4 +1,5 @@
-const {orderBy, getPokemonsOwn, getCache, getDetail} = require('../helpers');
+const {getCache, getDetail} = require('../helpers');
+const {orderBy} = require('../../../client/src/utils');
 const {Pokemon} = require('../db');
 const cache = require('../cache');
 
@@ -14,14 +15,14 @@ async function getPokemons(req, res) { // req.query = {only, apiRegs = 40, name,
         //////// Paginado ////////
         if (req.query.page){
             const {ipp = 12} = req.query;
-            const init = req.query.page * ipp - ipp;
 
-            if (init >= results.length) return res.status(404).send('Page out of range');
+            if ((req.query.page * ipp - ipp) >= results.length) return res.status(404).send('Page out of range');
             
-            results = results.slice(init, init - -ipp);
+            results = results.slice(req.query.page * ipp - ipp, req.query.page * ipp);
         }
 
-        res.send(results);
+//        res.send(results);
+        res.send(results.map(({id, name, weight, attack, types, image}) => ({id, name, weight, attack, types, image})));
     }
     catch(err){
         console.error(err);
@@ -39,15 +40,17 @@ async function getPokemonsParam (req, res) { // req.query = {only, apiRegs = 40}
     }
 }
 
-async function postPokemons(req, res) { // req.query = {apiRegs = 40}
+async function postPokemons(req, res) { // req.query = {apiRegs = 40} // req.body = {id: 'C10', name: 'pepe', attack: 10, types: [1, 5, 6]}
     try{
         await getCache({apiRegs: req.query.apiRegs});
 
-        if (cache.api.findIndex(el => el.name.toLowerCase() === req.body.name.toLowerCase()) + 1) return res.status(409).send('Ya existe en BD');
+        if (cache.api.findIndex(el => el.name.toLowerCase() === req.body.name.toLowerCase()) + 1) return res.status(409).send('Ya existe en Api');
 
         let [instance, created] = await Pokemon.findOrCreate({
             where: {name: req.body.name},
-            defaults: {id: ('C' + ((await getPokemonsOwn()).length - -1)), ...req.body.defaults}
+            defaults: {
+//              id: ('C' + ((await getPokemonsOwn()).length - -1)),     // El id se lo paso en el post
+                ...req.body}
         });
 
         if (!created) return res.status(409).send('Ya existe en BD');

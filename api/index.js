@@ -23,12 +23,12 @@ const { conn } = require('./src/db.js');
 // Syncing all the models at once.
 conn.sync(
   {
-//    force: true
+    force: true
 //    alter: true
   }
 )
 .then(async () => {
-  console.log('DB sincronizada OK!');
+  console.log('DB sincronized OK!');
   server.listen(3001, () => {
     console.log('Back server listening at 3001'); // eslint-disable-line no-console
   });
@@ -38,8 +38,8 @@ conn.sync(
 .then(async () => {
   const {Pokemon, Tipo} = conn.models;
   try{
-//      await Tipo.bulkCreate([{name: 'normal'}, {name: 'flying'}, {name: 'grass'}, {name: 'poison'}, {name: 'electric'}, {name: 'ground'}]);
-//      await Tipo.create({name: 'Pepe'});
+      await Tipo.bulkCreate([{name: 'normal'}, {name: 'flying'}, {name: 'grass'}, {name: 'poison'}, {name: 'electric'}, {name: 'ground'}]);
+      await Tipo.create({name: 'Pepe'});
 
     let insert = await Pokemon.create({
       id: 'C1',
