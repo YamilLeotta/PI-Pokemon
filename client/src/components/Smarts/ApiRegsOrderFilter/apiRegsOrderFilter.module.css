@@ -1,0 +1,16 @@
+.rightBar{
+    background-color: yellow;
+    width: 250px;
+    min-height: 100%;
+    float: right;
+}
+fieldset{
+    margin: 15px;
+}
+table{
+    width: 100%;
+}
+td{
+    text-align: center;
+    width: 50%;
+}

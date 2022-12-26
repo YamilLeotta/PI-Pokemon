@@ -1,0 +1,22 @@
+.container{
+    width: 95%;
+    margin: auto;
+    text-align: center;
+}
+.icon{
+    width: 35px;
+    height: 35px;
+    margin: 5px;
+    filter: grayscale(1) contrast(0.2) brightness(1.6);
+}
+.icon:hover{
+    filter: grayscale(0) contrast(0.5) brightness(1.2);
+}
+.iconActive{
+    filter: grayscale(0);
+}
+.iconReadOnly{
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+}
