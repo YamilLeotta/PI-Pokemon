@@ -12,16 +12,18 @@ export default class Types extends React.Component {
   }
 
   handleClick = event => {
-      this.setState(old => ({activeTypes: old.activeTypes?.some(({name}) => name === event.target.name) ?
-        old.activeTypes?.filter(({name}) => name !== event.target.name)
-        : [...old.activeTypes, this.props.types?.find(({name}) => name === event.target.name)]
-      }), () => {this.props.onChange(this.state.activeTypes)});
+    let activeTypes = this.state.activeTypes?.some(({name}) => name === event.target.name) ?
+    this.state.activeTypes?.filter(({name}) => name !== event.target.name)
+    : [...this.state.activeTypes, this.props.types?.find(({name}) => name === event.target.name)];
+
+    if (this.props.onChange(activeTypes))
+      this.setState(old => ({...old, activeTypes}));
   }
 
   render() {
     return (
       <div className={s.container}>
-          {this.props.types.map(({name}) => (<img key={name} className={this.state.activeTypes.some(el => el.name === name) ? this.props.onChange ? `${s.icon} ${s.iconActive}` : s.iconReadOnly : s.icon} src={`./images/types/${name}.gif`} alt={name} title={name.toUpperCase()} name={name} onClick={this.props.onChange && this.handleClick} />))}
+          {this.props.types.map(({name}) => (<img key={name} className={this.state.activeTypes.some(el => el.name === name) ? this.props.onChange ? `${s.icon} ${s.iconActive}` : s.iconReadOnly : s.icon} src={`../images/types/${name}.gif`} alt={name} title={name.toUpperCase()} name={name} onClick={this.props.onChange && this.handleClick} />))}
         </div>
     );
   }

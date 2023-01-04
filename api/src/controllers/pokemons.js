@@ -21,8 +21,8 @@ async function getPokemons(req, res) { // req.query = {only, apiRegs = 40, name,
             results = results.slice(req.query.page * ipp - ipp, req.query.page * ipp);
         }
 
-//        res.send(results);
-        res.send(results.map(({id, name, weight, attack, types, image}) => ({id, name, weight, attack, types, image})));
+        res.send(results);
+//        res.send(results.map(({id, name, weight, attack, types, image}) => ({id, name, weight, attack, types, image})));
     }
     catch(err){
         console.error(err);
@@ -44,18 +44,22 @@ async function postPokemons(req, res) { // req.query = {apiRegs = 40} // req.bod
     try{
         await getCache({apiRegs: req.query.apiRegs});
 
-        if (cache.api.findIndex(el => el.name.toLowerCase() === req.body.name.toLowerCase()) + 1) return res.status(409).send('Ya existe en Api');
+//        if ((cache.api.length) && (cache.api.findIndex(el => el.name?.toLowerCase() === req.body.name.toLowerCase()) + 1)) return res.status(409).send('Ya existe en Api');
+
+        if (cache.api.findIndex(el => el.name.toLowerCase() === req.body.defaults.name.toLowerCase()) + 1) return res.status(409).send('Ya existe en Api');
 
         let [instance, created] = await Pokemon.findOrCreate({
-            where: {name: req.body.name},
+            where: {name: req.body.defaults.name},
             defaults: {
-//              id: ('C' + ((await getPokemonsOwn()).length - -1)),     // El id se lo paso en el post
-                ...req.body}
+              id: ('C' + (await Pokemon.count() + 1)),     // El id se lo paso en el post
+                ...req.body.defaults,
+//                id: req.body.id
+            }
         });
 
         if (!created) return res.status(409).send('Ya existe en BD');
 
-        await instance.setTypes(req.body.types);
+        await instance.setTypes(req.body.types.map(({id}) => id));
 
         cache.own.push({...instance.dataValues, types: req.body.types});
 

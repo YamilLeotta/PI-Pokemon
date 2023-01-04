@@ -1,11 +1,14 @@
 .card{
-    background-color: red;
     width: 200px;
     height: 300px;
     display: inline-block;
     margin: 20px;
-    border-radius: 10px;
     cursor: pointer;
+    border-radius: 20px;
+    border: solid rgb(67, 67, 67);
+    background-color: white;
+    opacity: 80%;
+    filter: grayscale(0.5);
 }
 img{
     height: 150px;
@@ -14,4 +17,12 @@ img{
 }
 h3{
     margin: 15px;
+}
+.card:hover{
+    background-color: white;
+    transform: scale(1.05);
+    box-shadow: 5px 5px grey;
+    opacity: 95%;
+    transition: all 0.2s;
+    filter: grayscale(0);
 }

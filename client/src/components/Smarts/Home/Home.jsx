@@ -7,15 +7,16 @@ import {getTypes, setTypesFilter} from "../../../redux/actions";
 
 class Home extends React.Component {
   componentDidMount(){
-    if (!this.props.types) this.props.getTypes().then(results => this.props.setTypesFilter(results.payload));
+    if (!this.props.types || !this.props.typesFilter) this.props.getTypes().then(results => this.props.setTypesFilter(results.payload));
   }
 
   handleFilterChange = typesSelected => {
     this.props.setTypesFilter(typesSelected);
+    return true;
   }
   
   render() {
-    if (!this.props.types || !this.props.typesFilter || this.props.loading) return <div><h2>Loading...</h2></div>
+    if (!this.props.types || !this.props.typesFilter) return (<div><h2>Loading types...</h2></div>)
     
     let pokemonsFiltered = [];
     if (this.props.pokemons?.own && this.props.ownRegs) pokemonsFiltered.push(...this.props.pokemons.own)  // Pokemons DB
@@ -24,11 +25,15 @@ class Home extends React.Component {
     pokemonsFiltered = pokemonsFiltered.filter(({types}) => types.some(type => this.props.typesFilter.some(({name}) => name === type)));
 
     return (
-      <div>
-        <ApiRegsOrderFilter apiRegs={this.props.apiRegs} ownRegs={this.props.ownRegs} apiPokemons={(this.props.pokemons?.api || []).length}// Para apiRegsOrderFilter
+      <div style={{height: '100%'}}>
+        <ApiRegsOrderFilter apiRegs={this.props.apiRegs} ownRegs={this.props.ownRegs} apiPokemons={(this.props.pokemons?.api || []).length} // Para apiRegsOrderFilter
           onFilterChange={this.handleFilterChange} types={this.props.types} typesFilter={this.props.typesFilter} // Para Types
         />
-        {pokemonsFiltered.length ? <PokemonCards pokemonsFiltered={pokemonsFiltered} /> : <div style={{display: 'inline-block'}}><h3>No pokemons to list.</h3></div>}
+        {this.props.loading ?
+          <div style={{display: 'inline-block'}}><h3>Loading pokemons...</h3></div>
+          : (pokemonsFiltered.length ?
+            <PokemonCards pokemonsFiltered={pokemonsFiltered} />
+            : <div style={{display: 'inline-block'}}><h3>No pokemons to list!</h3></div>)}
       </div>
     );
   }

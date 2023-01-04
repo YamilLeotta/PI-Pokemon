@@ -1,5 +1,5 @@
 import React from "react";
-//import './App.css';
+import './App.css';
 import {Route, Switch} from 'react-router-dom';
 import Nav from './components/Dumbs/Nav/Nav';
 import Home from './components/Smarts/Home/Home';
@@ -9,7 +9,7 @@ import CreatePokemon from './components/Smarts/CreatePokemon/CreatePokemon';
 
 function App() {
   return (
-    <div style={{height: '100%'}}>
+    <div className={"app"}>
       <Switch>
         <Route exact path="/" component={Landing} />
         <Nav />
@@ -18,11 +18,9 @@ function App() {
         <Route path="/pokemon/create">
           <CreatePokemon />
         </Route>
-        <Route path="/pokemon/:name">
-          <PokemonDetails />
-        </Route>
+        <Route path="/pokemon/:id" component={PokemonDetails} />
         <Route path="/home">
-          <Home pokemons={[1,2,3,4,5,6]} />
+          <Home />
         </Route>
       </Switch>
     </div>

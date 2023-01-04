@@ -16,11 +16,13 @@ class ApiRegsOrderFilter extends React.Component {
   }
 
   componentDidMount(){
-    console.log('Component did Mount', this.props.pokemons);
     if (!this.props.pokemons){
-      console.log('Getting Pokemons');
-      if (this.props.apiRegs) this.props.getApiPokemons(this.props.apiRegs);
-      if (this.props.ownRegs) this.props.getOwnPokemons();
+      //console.log('Getting Pokemons');
+      this.props.setLoading(true);
+      Promise.all([(this.props.apiRegs) && this.props.getApiPokemons(this.props.apiRegs), (this.props.ownRegs) && this.props.getOwnPokemons()])
+        .then(() => this.props.setLoading(false));
+//      if (this.props.apiRegs) this.props.getApiPokemons(this.props.apiRegs);
+//      if (this.props.ownRegs) this.props.getOwnPokemons();
     }
 
   }
@@ -29,7 +31,7 @@ class ApiRegsOrderFilter extends React.Component {
     switch (event.target.name){
       case 'apiRegs': {
         if (event.target.value >= 0) this.props.setApiRegs(event.target.value);
-        console.log('defino si bajar mas pokemons', this.props.apiPokemons, event.target.value);
+        //console.log('defino si bajar mas pokemons', this.props.apiPokemons, event.target.value);
         if (this.props.apiPokemons < event.target.value) {
           this.props.setLoading(true);
           this.props.getApiPokemons(event.target.value).then(() => this.props.setLoading(false));
@@ -51,7 +53,7 @@ class ApiRegsOrderFilter extends React.Component {
   render() {
     return <div className={s.rightBar}>
       
-      <fieldset>
+      <fieldset disabled={this.props.loading}>
         <legend>Regs includes:</legend>
         <table>
           <tbody>
@@ -85,8 +87,12 @@ class ApiRegsOrderFilter extends React.Component {
                 <select name="orderBy" value={this.state.orderBy} onChange={this.handleOrder}>
                   <option value="">None</option>
                   <option value="name">Name</option>
+                  <option value="height">Height</option>
                   <option value="weight">Weight</option>
+                  <option value="hp">HP</option>
                   <option value="attack">Attack</option>
+                  <option value="defense">Defense</option>
+                  <option value="speed">Speed</option>
                 </select>
               </td>
             </tr>
@@ -112,4 +118,4 @@ class ApiRegsOrderFilter extends React.Component {
   }
 }
 
-export default connect(({order}) => ({order}), {setOrder, setApiRegs, setOwnRegs, getApiPokemons, getOwnPokemons, setLoading})(ApiRegsOrderFilter);
+export default connect(({order, loading}) => ({order, loading}), {setOrder, setApiRegs, setOwnRegs, getApiPokemons, getOwnPokemons, setLoading})(ApiRegsOrderFilter);

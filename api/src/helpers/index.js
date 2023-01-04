@@ -33,8 +33,8 @@ async function getPokemonsApi(cantidad){
     return cache.api = cache.api.concat(clean(results));
 }
 
-async function getCache({only, apiRegs = 40}){
-    // Devuelve desde los caches, los registros con los que voy a trabajar (el orden, paginado y el filtrado). Por defecto, devuelve 40 de Api, más los de Own
+async function getCache({only, apiRegs = cache.api.length || 40}){
+    // Devuelve desde los caches, los registros con los que voy a trabajar (el orden, paginado y el filtrado). Por defecto, devuelve todos los de Api, o 40 en caso de que no haya cache, más los de Own
     let results = [];
 
     if (only !== 'api')
@@ -47,28 +47,32 @@ async function getCache({only, apiRegs = 40}){
 }
 
 function clean(pokemons){
-    return pokemons.map(({id, name, weight, stats, sprites, types}) => (
+    return pokemons.map(({id, name, height, weight, stats, sprites, types}) => (
         {
             id,
             name,
+            height,
             weight,
             hp: stats[0]?.base_stat,
             attack: stats[1]?.base_stat,
             defense: stats[2]?.base_stat,
             speed: stats[3]?.base_stat,
             image: sprites?.other.home.front_default,
+//            image: sprites?.other.home.front_default.split('/').slice(0, sprites?.other.home.front_default.split('/').length - 1).join('/'),
             types: types?.map(types => types.type.name)
         }
     ))
 }
 
 async function getDetail(param, cachedPokemons){
-    let finded = cachedPokemons.find(el => (el.name.toLowerCase() === param.toLowerCase()) || (el.id == param));
+    let finded = cachedPokemons.find(el => (el.name.toLowerCase() === param.toLowerCase()) || (el.id.toString().toLowerCase() == param.toLowerCase()));
+
 
     if (!finded){
         console.log(`Busco Pokemon ${param} en Api!`);
         finded = (await (axios.get(`https://pokeapi.co/api/v2/pokemon/${param}`)))?.data;
-        finded = finded && clean([finded]);
+        finded = finded && clean([finded])[0];
+        cache.api.push(finded);
     }
 
     return finded;

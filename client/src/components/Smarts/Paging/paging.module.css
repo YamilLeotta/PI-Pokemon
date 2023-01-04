@@ -1,5 +1,6 @@
 .paging {
-    background-color: cyan;
+    background-color: rgb(190, 190, 67);
+    color: rgb(67, 67, 67);
     width: auto;
     text-align: center;
 }

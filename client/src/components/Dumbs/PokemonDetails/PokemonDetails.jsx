@@ -1,50 +1,44 @@
-import React, { Component } from "react";
+import React from "react";
+import {connect} from "react-redux";
+import {getPokemonDetail, setLoading} from "../../../redux/actions";
+import {capitalize} from "../../../utils";
+import Types from "../../Smarts/Types/Types";
+import s from './pokemonDetails.module.css';
 
-export default class PokemonDetails extends Component {
+class PokemonDetails extends React.Component {
+  componentDidMount() {
+    try{
+      this.props.setLoading(true);
+      this.props.getPokemonDetail(this.props.match.params.id).then(() => this.props.setLoading(false));
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
+
   render() {
+    if (this.props.loading) return (<h3>Loading...</h3>);
+    if (!this.props.pokemonDetail) return (<h3>Pokemon not found!</h3>);
+
     return (
-      <div>
-        <h1>Pokemon Details</h1>
+      <div style={{width: '20%', margin:'auto', marginTop: '20px', padding: '20px', textAlign: 'center', backgroundColor: 'white',
+      opacity: '95%', borderRadius: '30px'}}>
+          <h1>{capitalize(this.props.pokemonDetail.name) + ` (${this.props.pokemonDetail.id})`}</h1>
+          <img className={s.imgDetail} src={this.props.pokemonDetail.image} alt={capitalize(this.props.pokemonDetail.name)} />
+          <Types types={this.props.pokemonDetail.types.map(name => ({name}))} actives={this.props.pokemonDetail.types.map(name => ({name}))} />
+          <table className={s.tableSpecs}>
+            <tbody>
+              <tr><td className={s.tdDetail}>Height:</td><td className={s.tdValue}>{this.props.pokemonDetail.height}</td></tr>
+              <tr><td className={s.tdDetail}>Weight:</td><td className={s.tdValue}>{this.props.pokemonDetail.weight}</td></tr>
+              <tr><td className={s.tdDetail}>HP:</td><td className={s.tdValue}>{this.props.pokemonDetail.hp}</td></tr>
+              <tr><td className={s.tdDetail}>Attack:</td><td className={s.tdValue}>{this.props.pokemonDetail.attack}</td></tr>
+              <tr><td className={s.tdDetail}>Defense:</td><td className={s.tdValue}>{this.props.pokemonDetail.defense}</td></tr>
+              <tr><td className={s.tdDetail}>Speed:</td><td className={s.tdValue}>{this.props.pokemonDetail.speed}</td></tr>
+            </tbody>
+          </table>
       </div>
-    );
+      );
   }
 }
 
-/*
-import React from "react";
-import {useSelector, useDispatch} from "react-redux";
-import * as actions from '../../redux/actions';
-import {useParams} from "react-router-dom";
-// Importar las actions como Object Modules, sino los test no funcionarán!
-
-// Fijense en los test que SI O SI tiene que ser un functional component, de otra forma NO VAN A PASAR LOS TEST
-// Deben usar Hooks para que los test pasen (lease tambien lo de react-redux).
-// No realicen un destructuring de ellos, sino que utilicenlos de la siguiente forma 'React.useState' y 'React.useEffect' ,
-// Si no lo hacen asi los test no van a correr.
-// TIP: Aqui seria un buen momento para utilizar el hook useSelector.
-
-const CharacterDetail = (props) => {
-  const dispatch = useDispatch;
-  const characterDetail = useSelector(state => state.characterDetail);
-  const {id} = useParams();
-
-  React.useEffect(() => {dispatch(actions.getCharacterDetail(id))}, [characterDetail]);
-
-  return (
-    <div>
-      <img src={characterDetail.image} alt={characterDetail.name} />
-      <h2>{characterDetail.name}</h2>
-      <h3>{characterDetail.faction}</h3>
-      <h3>{characterDetail.role}</h3>
-      <h3>{characterDetail.race}</h3>
-      <br/>
-      <h2>Ship: </h2>
-      <h3>{characterDetail.ship.name}</h3>
-      <img src={characterDetail.ship.image} alt={characterDetail.ship.name} />
-    </div>
-  );
-};
-
-
-export default CharacterDetail;
-*/
+export default connect(({pokemonDetail, types, loading}) => ({pokemonDetail, types, loading}), {getPokemonDetail, setLoading})(PokemonDetails);

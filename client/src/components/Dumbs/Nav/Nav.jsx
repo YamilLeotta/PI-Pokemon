@@ -24,6 +24,7 @@ export default class Nav extends React.Component {
         <NavLink className={s.navLink} activeClassName={s.navLinkActive} to="/home">Home</NavLink>
         <br />
         <NavLink className={s.navLink} activeClassName={s.navLinkActive} exact to="/pokemon/create">Create Pokemon</NavLink>
+        <br />
         <SearchBar />
       </div>
     );

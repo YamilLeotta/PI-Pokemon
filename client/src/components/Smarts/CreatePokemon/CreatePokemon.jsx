@@ -1,67 +1,137 @@
-import React, { Component } from "react";
+import React from "react";
+import Types from "../Types/Types";
+import {getTypes, createPokemon} from "../../../redux/actions";
+import {connect} from "react-redux";
+import {Redirect} from 'react-router-dom';
 
-export default class CreatePokemon extends Component {
+class CreatePokemon extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      defaults: {
+        name: '',
+        image: '',
+        height: '',
+        weight: '',
+        hp: '',
+        attack: '',
+        defense: '',
+        speed: ''
+      },
+      types: [],
+      completed: false,
+      error: {
+        name: true,
+        image: false,
+        height: true,
+        weight: true,
+        hp: true,
+        attack: true,
+        defense: true,
+        speed: true
+      }
+    };
+  }
+
+  componentDidMount(){
+    if (!this.props.types) this.props.getTypes();
+  }
+
+  handleSubmit = event => {
+    event.preventDefault();
+    this.props.createPokemon(this.state)
+      .then(() => alert(`The Pokemon '${this.state.defaults.name}' has been created!`))
+      .then(() => this.setState({completed: true}));
+  }
+
+  handleOnChange = ({target}) => {
+    let error = {...this.state.error};
+
+    switch (target.name){
+      case 'name': error.name = (target.value.length < 3 || target.value.length > 25 || !/^[a-zA-Z]+$/g.test(target.value)); break;
+      case 'image': error.image = (target.value !== '' && !(/^(http(s)?:\/\/.)[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/g.test(target.value))); break;
+      case 'height': error.height = ((target.value === '') || (target.value < 0) || (target.value > 1000)); break;
+      case 'weight': error.weight = ((target.value === '') || (target.value < 0) || (target.value > 10000)); break;
+      case 'hp': error.hp = ((target.value === '') || (target.value < 0) || (target.value > 255)); break;
+      case 'attack': error.attack = ((target.value === '') || (target.value < 0) || (target.value > 200)); break;
+      case 'defense':
+      case 'speed': error[target.name] = ((target.value === '') || (target.value < 0) || (target.value > 110)); break;
+      default: break;
+    }
+
+    this.setState(old => ({...old, defaults: {...old.defaults, [target.name]: target.value}, error}));
+  }
+
+  handleTypes = types => {
+    if (types.length > 2){
+      alert('You can assign up to two types!');
+      return false;
+    }
+    else{
+      this.setState(old => ({...old, types}));
+      return true;
+    }
+  }
+
   render() {
+    if (this.state.completed) return <Redirect to="/home" />
+    if (!this.props.types) return (<div><h2>Loading...</h2></div>)
+
     return (
-      <div>
-        <h1>Create Pokemon</h1>
-      </div>
-    );
+        <form onSubmit={this.handleSubmit} style={{width: '20%', margin:'auto', marginTop: '20px', padding: '20px', textAlign: 'center', backgroundColor: 'white',
+        opacity: '95%', borderRadius: '30px'}}>
+          <table>
+            <tbody>
+              <tr>
+                <td><label htmlFor="name">Name:</label></td>
+                <td><input type="text" id="name" name="name" value={this.state.defaults.name} placeholder="Pokemon's Name..." onChange={this.handleOnChange} /></td>
+              </tr>
+              <tr><td colSpan={2} style={{fontSize: 'smaller', paddingBottom: '20px', color: this.state.error.name ? 'red' : 'green'}}>Name must be between 3 and 25 characters Alpha string</td></tr>
+              <tr>
+                <td><label htmlFor="image">Image URL:</label></td>
+                <td><input type="url" id="image" name="image" value={this.state.defaults.image} placeholder="Pokemon's Image URL..." onChange={this.handleOnChange} /></td>
+              </tr>
+              <tr><td colSpan={2} style={{fontSize: 'smaller', paddingBottom: '20px', color: this.state.error.image ? 'red' : 'green'}}>URL must be an valid URL or empty</td></tr>
+              <tr>
+                <td><label htmlFor="height">Height:</label></td>
+                <td><input type="number" id="height" name="height" value={this.state.defaults.height} placeholder="Pokemon's Height..." onChange={this.handleOnChange} /></td>
+              </tr>
+              <tr><td colSpan={2} style={{fontSize: 'smaller', paddingBottom: '20px', color: this.state.error.height ? 'red' : 'green'}}>Height must be Number between 0 and 1000</td></tr>
+              <tr>
+                <td><label htmlFor="weight">Weight:</label></td>
+                <td><input type="number" id="weight" name="weight" value={this.state.defaults.weight} placeholder="Pokemon's Weight..." onChange={this.handleOnChange} /></td>
+              </tr>
+              <tr><td colSpan={2} style={{fontSize: 'smaller', paddingBottom: '20px', color: this.state.error.weight ? 'red' : 'green'}}>Weight must be Number between 0 and 10000</td></tr>
+              <tr>
+                <td><label htmlFor="hp">Hp:</label></td>
+                <td><input type="number" id="hp" name="hp" value={this.state.defaults.hp} placeholder="Pokemon's Hp..." onChange={this.handleOnChange} /></td>
+              </tr>
+              <tr><td colSpan={2} style={{fontSize: 'smaller', paddingBottom: '20px', color: this.state.error.hp ? 'red' : 'green'}}>Hp must be Number between 0 and 255</td></tr>
+              <tr>
+                <td><label htmlFor="attack">Attack:</label></td>
+                <td><input type="number" id="attack" name="attack" value={this.state.defaults.attack} placeholder="Pokemon's Attack..." onChange={this.handleOnChange} /></td>
+              </tr>
+              <tr><td colSpan={2} style={{fontSize: 'smaller', paddingBottom: '20px', color: this.state.error.attack ? 'red' : 'green'}}>Attack must be Number between 0 and 200</td></tr>
+              <tr>
+                <td><label htmlFor="defense">Defense:</label></td>
+                <td><input type="number" id="defense" name="defense" value={this.state.defaults.defense} placeholder="Pokemon's Defense..." onChange={this.handleOnChange} /></td>
+              </tr>
+              <tr><td colSpan={2} style={{fontSize: 'smaller', paddingBottom: '20px', color: this.state.error.defense ? 'red' : 'green'}}>Defense must be Number between 0 and 110</td></tr>
+              <tr>
+                <td><label htmlFor="speed">Speed:</label></td>
+                <td><input type="number" id="speed" name="speed" value={this.state.defaults.speed} placeholder="Pokemon's Speed..." onChange={this.handleOnChange} /></td>
+              </tr>
+              <tr><td colSpan={2} style={{fontSize: 'smaller', paddingBottom: '20px', color: this.state.error.speed ? 'red' : 'green'}}>Speed must be Number between 0 and 110</td></tr>
+            </tbody>
+          </table>
+          <fieldset>
+            <legend>Types:</legend>
+            <Types onChange={this.handleTypes} types={this.props.types} actives={this.state.types} />
+          </fieldset>
+          <input type="submit" value="Submit" disabled={Object.values(this.state.error).includes(true)}/>
+        </form> 
+    )
   }
 }
-/*
-import React from "react";
-// Importar las actions como Object Modules, sino los test no funcionarán!
-import * as acc from '../../redux/actions';
-import {useDispatch} from "react-redux";
 
-// Fijense en los test que SI O SI tiene que ser un functional component, de otra forma NO VAN A PASAR LOS TEST
-// Deben usar Hooks para que los test pasen.
-// No realicen un destructuring de ellos, sino que utilicenlos de la siguiente forma 'React.useState' y 'React.useEffect' ,
-// Si no lo hacen asi los test no van a correr.
-
-const CreateCharacter = () => {
-  let dispatch = useDispatch();
-  const [input, setInput] = React.useState({
-    name: "",
-    race: "",
-    role: "",
-    faction: "",
-    ship: {
-      name: ""
-    }
-  });
-
-  function handleChange(e){
-      setInput({...input, [e.target.name]: e.target.value});
-  }
-
-  function handleChangeShip(e){
-    setInput({...input, ship: {name: e.target.value}});
-  }
-  
-  function handleSubmit(e){
-    e.preventDefault();
-    dispatch(acc.createCharacter(input));
-  }
-
-  return (
-    <form onSubmit={(e) => handleSubmit(e)}>
-      <label>Name: </label>
-      <input type="text" name="name" value={input.name} onChange={(e) => handleChange(e)}/>
-      <label>Race: </label>
-      <input type="text" name="race" value={input.race} onChange={(e) => handleChange(e)} />
-      <label>Faction: </label>
-      <input type="text" name="faction" value={input.faction} onChange={(e) => handleChange(e)} />
-      <label>Role: </label>
-      <input type="text" name="role" value={input.role} onChange={(e) => handleChange(e)} />
-      <label>Ship: </label>
-      <input type="text" name="ship" value={input.ship.name} onChange={(e) => handleChangeShip(e)} />
-      <button type="submit">Create Character</button>
-    </form>
-  );
-};
-
-
-export default CreateCharacter;
-*/
+export default connect(({types}) => ({types}), {getTypes, createPokemon})(CreatePokemon);

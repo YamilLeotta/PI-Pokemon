@@ -1,5 +1,3 @@
-let nextId = 1;
-
 //Actions
 export const setTypesFilter = payload => ({type: 'SET_TYPES_FILTER', payload});
 export const setOrder = payload => ({type: 'SET_ORDER', payload});
@@ -28,18 +26,17 @@ export const getTypes = () =>
         .catch(console.log);
 
 export const createPokemon = data =>
-    dispatch => {fetch(`http://localhost:3001/pokemons`, {
+    dispatch => fetch(`http://localhost:3001/pokemons`, {
         method: 'POST',
-        body: JSON.stringify({...data, id: nextId++}),
+        body: JSON.stringify(data),
         headers:{'Content-Type': 'application/json'}
         })
         .then(resp => resp.json())
         .then(payload => dispatch({type: 'CREATE_POKEMON', payload}))
-        .catch(console.log)};
+        .catch(console.log);
 
-// Depende como debo trabajar con el detalle, si es por estado global:
 export const getPokemonDetail = id =>
-    dispatch => {fetch(`http://localhost:3001/pokemons/${id}`)
-        .then(resp => resp.json())
+    dispatch => fetch(`http://localhost:3001/pokemons/${id}`)
+        .then(resp => (resp.status === 404) ? null : resp.json())
         .then(payload => dispatch({type: 'GET_POKEMON_DETAIL', payload}))
-        .catch(console.log)};
+        .catch(console.log);

@@ -18,7 +18,12 @@ a:hover, .navLink:hover {
     color: rgb(67, 67, 67);
 }
 
+.hidden {
+    visibility: hidden;
+}
+
 .navLinkActive {
     background-color: rgb(190, 190, 0);
     color: rgb(67, 67, 67);
+    visibility: visible !important;
 }

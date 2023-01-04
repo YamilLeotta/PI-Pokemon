@@ -1,0 +1,21 @@
+.imgDetail{
+    width: 300px;
+    height: 300px;
+}
+.tableSpecs{
+    width: 50%;
+    margin: auto;
+    margin-top: 50px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: large;
+}
+.tdDetail{
+    padding: 10px;
+    text-align: right;
+    font-weight: bolder;
+    width: 50%;
+}
+.tdValue{
+    padding: 5px;
+    text-align: left;
+}
