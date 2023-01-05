@@ -1,4 +1,17 @@
 .app {
+  height: 100%;
+}
+.tableContainer{
+  position: relative;
+  width: 450px;
+  margin: auto;
+  padding: 20px;
+  text-align: center;
+  background-color: white;
+  opacity: 95%;
+  border-radius: 30px;
+}
+.container{
   min-height: 100%;
   background-image: url('./images/background.jpg');
   background-position: center;

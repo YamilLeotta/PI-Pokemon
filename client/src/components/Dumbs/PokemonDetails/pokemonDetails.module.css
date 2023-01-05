@@ -19,3 +19,10 @@
     padding: 5px;
     text-align: left;
 }
+.shiny{
+    position: absolute;
+    left: 95px;
+}
+.shiny:hover{
+    opacity: 0%;
+}

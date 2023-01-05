@@ -25,15 +25,15 @@ class Home extends React.Component {
     pokemonsFiltered = pokemonsFiltered.filter(({types}) => types.some(type => this.props.typesFilter.some(({name}) => name === type)));
 
     return (
-      <div style={{height: '100%'}}>
+      <div className="container">
         <ApiRegsOrderFilter apiRegs={this.props.apiRegs} ownRegs={this.props.ownRegs} apiPokemons={(this.props.pokemons?.api || []).length} // Para apiRegsOrderFilter
           onFilterChange={this.handleFilterChange} types={this.props.types} typesFilter={this.props.typesFilter} // Para Types
         />
         {this.props.loading ?
-          <div style={{display: 'inline-block'}}><h3>Loading pokemons...</h3></div>
+          <div style={{display: 'inline-block'}}><h2>Loading pokemons...</h2></div>
           : (pokemonsFiltered.length ?
             <PokemonCards pokemonsFiltered={pokemonsFiltered} />
-            : <div style={{display: 'inline-block'}}><h3>No pokemons to list!</h3></div>)}
+            : <div style={{display: 'inline-block'}}><h2>No pokemons to list!</h2></div>)}
       </div>
     );
   }

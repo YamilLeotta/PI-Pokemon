@@ -7,8 +7,9 @@ async function getPokemonsOwn(){
     console.log('Traigo Pokemons desde BBDD!');
 
     // Eager loading (incluye los tipos adentro de cada registro)
-    cache.own = (await Pokemon.findAll({include: 'types'})).map(({dataValues}) => {
+    cache.own = (await Pokemon.findAll({include: 'types', required: false})).map(({dataValues}) => {
         dataValues.types = dataValues.types.map(el => el.dataValues.name);
+        if (!dataValues.types.length) dataValues.types.push('unknown');
         return dataValues;
     });
 
@@ -57,8 +58,8 @@ function clean(pokemons){
             attack: stats[1]?.base_stat,
             defense: stats[2]?.base_stat,
             speed: stats[3]?.base_stat,
-            image: sprites?.other.home.front_default,
-//            image: sprites?.other.home.front_default.split('/').slice(0, sprites?.other.home.front_default.split('/').length - 1).join('/'),
+//            image: sprites?.other.home.front_default,
+            image: sprites?.other.home.front_default.split('/').slice(0, sprites?.other.home.front_default.split('/').length - 1).join('/'),
             types: types?.map(types => types.type.name)
         }
     ))

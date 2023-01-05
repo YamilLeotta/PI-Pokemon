@@ -4,6 +4,7 @@ import {getPokemonDetail, setLoading} from "../../../redux/actions";
 import {capitalize} from "../../../utils";
 import Types from "../../Smarts/Types/Types";
 import s from './pokemonDetails.module.css';
+import pokebola from '../../../images/pokebola.png'
 
 class PokemonDetails extends React.Component {
   componentDidMount() {
@@ -20,11 +21,14 @@ class PokemonDetails extends React.Component {
     if (this.props.loading) return (<h3>Loading...</h3>);
     if (!this.props.pokemonDetail) return (<h3>Pokemon not found!</h3>);
 
+    if (this.props.pokemonDetail.id[0] && !this.props.pokemonDetail.image) this.props.pokemonDetail.image = pokebola;
+
     return (
-      <div style={{width: '20%', margin:'auto', marginTop: '20px', padding: '20px', textAlign: 'center', backgroundColor: 'white',
-      opacity: '95%', borderRadius: '30px'}}>
+      <div className="container" style={{paddingTop: '20px'}}>
+        <div className="tableContainer">
           <h1>{capitalize(this.props.pokemonDetail.name) + ` (${this.props.pokemonDetail.id})`}</h1>
-          <img className={s.imgDetail} src={this.props.pokemonDetail.image} alt={capitalize(this.props.pokemonDetail.name)} />
+          <img className={s.imgDetail} src={this.props.pokemonDetail.image + (!this.props.pokemonDetail.id[0] ? `/shiny/${this.props.pokemonDetail.id}.png` : '')} alt={capitalize(this.props.pokemonDetail.name)} />
+          {!this.props.pokemonDetail.id[0] && (<img className={`${s.imgDetail} ${s.shiny}`} src={this.props.pokemonDetail.image + (!this.props.pokemonDetail.id[0] ? `/${this.props.pokemonDetail.id}.png` : '')} alt={capitalize(this.props.pokemonDetail.name)} />)}
           <Types types={this.props.pokemonDetail.types.map(name => ({name}))} actives={this.props.pokemonDetail.types.map(name => ({name}))} />
           <table className={s.tableSpecs}>
             <tbody>
@@ -36,6 +40,7 @@ class PokemonDetails extends React.Component {
               <tr><td className={s.tdDetail}>Speed:</td><td className={s.tdValue}>{this.props.pokemonDetail.speed}</td></tr>
             </tbody>
           </table>
+        </div>
       </div>
       );
   }

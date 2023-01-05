@@ -49,7 +49,7 @@ async function postPokemons(req, res) { // req.query = {apiRegs = 40} // req.bod
         if (cache.api.findIndex(el => el.name.toLowerCase() === req.body.defaults.name.toLowerCase()) + 1) return res.status(409).send('Ya existe en Api');
 
         let [instance, created] = await Pokemon.findOrCreate({
-            where: {name: req.body.defaults.name},
+            where: {name: req.body.defaults.name.toLowerCase()},
             defaults: {
               id: ('C' + (await Pokemon.count() + 1)),     // El id se lo paso en el post
                 ...req.body.defaults,

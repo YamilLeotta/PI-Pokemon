@@ -33,7 +33,7 @@ export const createPokemon = data =>
         })
         .then(resp => resp.json())
         .then(payload => dispatch({type: 'CREATE_POKEMON', payload}))
-        .catch(console.log);
+//        .catch(() => throw`Error ocurred. Posibily the pokemon ${data.name} already exists on DB.`);
 
 export const getPokemonDetail = id =>
     dispatch => fetch(`http://localhost:3001/pokemons/${id}`)

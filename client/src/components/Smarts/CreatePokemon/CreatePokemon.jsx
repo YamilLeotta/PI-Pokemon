@@ -39,9 +39,16 @@ class CreatePokemon extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    this.props.createPokemon(this.state)
+
+    let {defaults} = {...this.state};
+    if (!defaults.image) defaults.image = null;
+
+    this.props.createPokemon({defaults, types: this.state.types})
       .then(() => alert(`The Pokemon '${this.state.defaults.name}' has been created!`))
-      .then(() => this.setState({completed: true}));
+      .catch(() => alert(`Error ocurred. Posibily the pokemon ${this.state.defaults.name} already exists on DB.`))
+      .then(() => this.setState({completed: true}))
+
+    console.log(this.state);
   }
 
   handleOnChange = ({target}) => {
@@ -78,8 +85,8 @@ class CreatePokemon extends React.Component {
     if (!this.props.types) return (<div><h2>Loading...</h2></div>)
 
     return (
-        <form onSubmit={this.handleSubmit} style={{width: '20%', margin:'auto', marginTop: '20px', padding: '20px', textAlign: 'center', backgroundColor: 'white',
-        opacity: '95%', borderRadius: '30px'}}>
+      <div className="container" style={{paddingTop: '20px'}}>
+        <form onSubmit={this.handleSubmit} className="tableContainer">
           <table>
             <tbody>
               <tr>
@@ -126,10 +133,11 @@ class CreatePokemon extends React.Component {
           </table>
           <fieldset>
             <legend>Types:</legend>
-            <Types onChange={this.handleTypes} types={this.props.types} actives={this.state.types} />
+            <Types onChange={this.handleTypes} types={this.props.types.filter(({name}) => name !== 'unknown')} actives={this.state.types} />
           </fieldset>
           <input type="submit" value="Submit" disabled={Object.values(this.state.error).includes(true)}/>
-        </form> 
+        </form>
+      </div>
     )
   }
 }

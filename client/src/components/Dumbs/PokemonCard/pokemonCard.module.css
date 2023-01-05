@@ -7,7 +7,7 @@
     border-radius: 20px;
     border: solid rgb(67, 67, 67);
     background-color: white;
-    opacity: 80%;
+    opacity: 90%;
     filter: grayscale(0.5);
 }
 img{
@@ -18,11 +18,15 @@ img{
 h3{
     margin: 15px;
 }
+h2{
+    color:lightslategray;
+    padding: 15px;
+}
 .card:hover{
     background-color: white;
     transform: scale(1.05);
     box-shadow: 5px 5px grey;
-    opacity: 95%;
+    opacity: 100%;
     transition: all 0.2s;
     filter: grayscale(0);
 }
