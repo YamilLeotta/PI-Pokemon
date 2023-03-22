@@ -1,5 +1,6 @@
-import {createStore, applyMiddleware, compose} from 'redux';
+import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
 import rootReducer from '../reducer';
+import pokemonsReducer from '../reducer/pokemonsReducer'
 import thunk from 'redux-thunk';
 
 const composeEnhancers =
@@ -8,7 +9,7 @@ const composeEnhancers =
    compose;
 
 const store = createStore(
-   rootReducer,
+   combineReducers({root: rootReducer, pokemons: pokemonsReducer}),
    composeEnhancers(applyMiddleware(thunk)),
 );
 

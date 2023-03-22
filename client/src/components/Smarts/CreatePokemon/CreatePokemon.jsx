@@ -142,4 +142,4 @@ class CreatePokemon extends React.Component {
   }
 }
 
-export default connect(({types}) => ({types}), {getTypes, createPokemon})(CreatePokemon);
+export default connect(({root}) => ({types: root.types}), {getTypes, createPokemon})(CreatePokemon);

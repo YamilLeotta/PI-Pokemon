@@ -30,4 +30,4 @@ class PokemonCards extends React.Component {
   }
 }
 
-export default connect(({order, ipp}) => ({order, ipp}), {setIpp})(PokemonCards);
+export default connect(({root}) => ({order: root.order, ipp: root.ipp}), {setIpp})(PokemonCards);

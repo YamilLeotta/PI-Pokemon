@@ -118,4 +118,4 @@ class ApiRegsOrderFilter extends React.Component {
   }
 }
 
-export default connect(({order, loading}) => ({order, loading}), {setOrder, setApiRegs, setOwnRegs, getApiPokemons, getOwnPokemons, setLoading})(ApiRegsOrderFilter);
+export default connect(({root}) => ({order: root.order, loading: root.loading}), {setOrder, setApiRegs, setOwnRegs, getApiPokemons, getOwnPokemons, setLoading})(ApiRegsOrderFilter);
