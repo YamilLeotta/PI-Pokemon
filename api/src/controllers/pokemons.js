@@ -34,8 +34,8 @@ async function getPokemonsParam (req, res) { // req.query = {only, apiRegs = 40}
         return res.send(await getDetail(req.params.param, await getCache(req.query)));
     }
     catch(err){
-        console.error(err);
-        res.status(err.response?.status || 500).send(err.response?.statusText || err);
+        console.error(err.response ? `${err.response.status} ${err.response.data}` : err);
+        res.status(err.response?.status || 500).send(err.response?.data || err);
     }
 }
 
