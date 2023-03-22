@@ -1,5 +1,5 @@
 import React from "react";
-import {connect, useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {getPokemonDetail, setLoading} from "../../../redux/actions";
 import {capitalize} from "../../../utils";
 import Types from "../../Smarts/Types/Types";
@@ -15,11 +15,10 @@ export default function PokemonDetails(props){
   const loading = useSelector(state => state.root.loading);
 
   useEffect(() => {
-    console.log('entra al use effect');
+    //console.log('entra al use effect');
     dispatch(setLoading(true));
     dispatch(getPokemonDetail(id)).then(() => dispatch(setLoading(false)));
-  }, []);
-
+  }, [id, dispatch]);
 
   if (loading) return (<h3>Loading...</h3>);
   if (!pokemonDetail) return (<h3>Pokemon not found!</h3>);

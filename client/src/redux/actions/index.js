@@ -8,25 +8,25 @@ export const setLoading = payload => ({type: 'SET_LOADING', payload});
 
 //Thunks
 export const getOwnPokemons = () =>
-    dispatch => {fetch(`http://localhost:3001/pokemons?only=own`)
+    dispatch => {fetch(`${process.env.REACT_APP_BACK_URL}/pokemons?only=own`)
         .then(resp => resp.json())
         .then(payload => dispatch({type: 'GET_OWN_POKEMONS', payload}))
         .catch(console.log)};
 
 export const getApiPokemons = apiRegs =>
-    dispatch => fetch(`http://localhost:3001/pokemons?only=api&apiRegs=${apiRegs}`)
+    dispatch => fetch(`${process.env.REACT_APP_BACK_URL}/pokemons?only=api&apiRegs=${apiRegs}`)
         .then(resp => resp.json())
         .then(payload => dispatch({type: 'GET_API_POKEMONS', payload}))
         .catch(console.log);
     
 export const getTypes = () =>
-    dispatch => fetch(`http://localhost:3001/types`)
+    dispatch => fetch(`${process.env.REACT_APP_BACK_URL}/types`)
         .then(resp => resp.json())
         .then(payload => dispatch({type: 'GET_TYPES', payload}))
         .catch(console.log);
 
 export const createPokemon = data =>
-    dispatch => fetch(`http://localhost:3001/pokemons`, {
+    dispatch => fetch(`${process.env.REACT_APP_BACK_URL}/pokemons`, {
         method: 'POST',
         body: JSON.stringify(data),
         headers:{'Content-Type': 'application/json'}
@@ -36,7 +36,7 @@ export const createPokemon = data =>
 //        .catch(() => throw`Error ocurred. Posibily the pokemon ${data.name} already exists on DB.`);
 
 export const getPokemonDetail = id =>
-    dispatch => fetch(`http://localhost:3001/pokemons/${id}`)
+    dispatch => fetch(`${process.env.REACT_APP_BACK_URL}/pokemons/${id}`)
         .then(resp => (resp.status === 404) ? null : resp.json())
         .then(payload => dispatch({type: 'GET_POKEMON_DETAIL', payload}))
         .catch(console.log);

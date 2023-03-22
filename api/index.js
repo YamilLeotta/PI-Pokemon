@@ -17,6 +17,7 @@
 //     =====`-.____`.___ \_____/___.-`___.-'=====
 //                       `=---='
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+require('dotenv').config();
 const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
 
@@ -29,8 +30,8 @@ conn.sync(
 )
 .then(async () => {
   console.log('DB sincronized OK!');
-  server.listen(3001, () => {
-    console.log('Back server listening at 3001'); // eslint-disable-line no-console
+  server.listen(process.env.PORT || 3001, () => {
+    console.log('Back server listening at', process.env.PORT || 3001); // eslint-disable-line no-console
   });
 })
 /*

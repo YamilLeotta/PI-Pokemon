@@ -39,4 +39,4 @@ class Home extends React.Component {
   }
 }
 
-export default connect(({pokemons, root}) => ({pokemons: pokemons.pokemons, typesFilter: root. typesFilter, types: root.types, apiRegs: root.apiRegs, ownRegs: root.ownRegs, loading: root.loading}), {getTypes, setTypesFilter})(Home);
+export default connect(({pokemons, root}) => ({pokemons: pokemons.pokemons, typesFilter: root.typesFilter, types: root.types, apiRegs: root.apiRegs, ownRegs: root.ownRegs, loading: root.loading}), {getTypes, setTypesFilter})(Home);

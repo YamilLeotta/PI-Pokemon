@@ -13,6 +13,7 @@
     "react-redux": "^7.2.3",
     "react-scripts": "4.0.3",
     "redux-thunk": "^2.3.0",
+    "dotenv": "^16.0.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
