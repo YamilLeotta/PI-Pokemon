@@ -1,5 +1,4 @@
-const {getCache, getDetail} = require('../helpers');
-const {orderBy} = require('../../../client/src/utils');
+const {getCache, getDetail, orderBy} = require('../helpers');
 const {Pokemon} = require('../db');
 const cache = require('../cache');
 
