@@ -7,7 +7,7 @@
     border-radius: 20px;
     border: solid rgb(67, 67, 67);
     background-color: white;
-    opacity: 90%;
+    opacity: 0.9;
     filter: grayscale(0.5);
 }
 img{
@@ -26,7 +26,7 @@ h2{
     background-color: white;
     transform: scale(1.05);
     box-shadow: 5px 5px grey;
-    opacity: 100%;
+    opacity: 1;
     transition: all 0.2s;
     filter: grayscale(0);
 }
