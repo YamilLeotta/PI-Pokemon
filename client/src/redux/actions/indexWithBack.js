@@ -40,6 +40,3 @@ export const getPokemonDetail = id =>
         .then(resp => (resp.status === 404) ? null : resp.json())
         .then(payload => dispatch({type: 'GET_POKEMON_DETAIL', payload}))
         .catch(console.log);
-
-
-console.log('Actions con back sin localstorage');
