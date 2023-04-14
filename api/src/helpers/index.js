@@ -28,8 +28,8 @@ async function getPokemonsApi(cantidad){
         results.push(...response.results.map(el => el.url));
     } 
     console.log(`Se descargaron ${results.length} Pokemons`);
-   
-    results = (await Promise.all(results.map(el => axios.get(el)))).map(el => el.data);
+
+    results = (await Promise.all(results.map(el => axios.get(el, {timeout: 10000})))).map(el => el.data);
 
     return cache.api = cache.api.concat(clean(results));
 }
@@ -59,7 +59,8 @@ function clean(pokemons){
             defense: stats[2]?.base_stat,
             speed: stats[3]?.base_stat,
 //            image: sprites?.other.home.front_default,
-            image: sprites?.other.home.front_default.split('/').slice(0, sprites?.other.home.front_default.split('/').length - 1).join('/'),
+            image: sprites.other.home.front_default?.split('/').slice(0, sprites.other.home.front_default?.split('/').length - 1).join('/') ||
+            sprites.other['official-artwork'].front_default?.split('/').slice(0, sprites.other['official-artwork'].front_default?.split('/').length - 1).join('/'),
             types: types?.map(types => types.type.name)
         }
     ))
